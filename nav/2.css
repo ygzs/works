@@ -2,27 +2,67 @@
     margin: 0px;
     padding: 0px;
 }
+body{
+    background: grey url(./wall1.png) no-repeat center center;
+}
 main{
-    margin-top: 150px;
-}
-main div{
+    height: 100vh;
     text-align: center;
-    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-kbd{
-    border: 1px solid red;
-    text-transform: uppercase;
-    display: inline-block;
-    width: 80px;
-    height: 80px;
+#main{
+    background: rgba(251,156,162,0.1);
+    border-radius: 10px;
+    background-size: cover;
+}
+#main .row{
+    margin: 25px 0px;
+}
+#main .row:nth-child(2){
+    margin-left: -28px;
+}
+#main .row:nth-child(3){
+    margin-left: -98px;
+}
+#main .row .key{
+    margin: 0px 13px;
+    width: 50px;
+    height: 40px;
+    background: linear-gradient(to bottom, #292929 1%,#111111 100%);
+    color: #c5c5c5;
+    border: 1px solid #373737;
+    border-radius: 6px;
+    box-shadow: 0px 0px 0px 1px #1a1b1c, 0px 0px 0px 2px #1f2020,0px 3px 0px 2px #080808;
+    font-size: 18px;
+    font-family: Helvetica;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
 }
-main div kbd button{
+#main .row .key button{
+    background-color: rgb(36, 35, 35);
+    color: gray;
     position: absolute;
-    top: 45px;
-    left: 25px;
+    bottom: 0px;
+    left: 10px;
     display: none;
+    border: none;
 }
-kbd:hover>button{
+#main .row .key:hover>button{
     display: inline-block;
+}
+#main .row .key span{
+    position: absolute;
+    top: 3px;
+    left: 9px;
+}
+#main .row .key img{
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 5px;
+    right: 7px;
 }

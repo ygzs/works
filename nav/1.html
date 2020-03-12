@@ -21,7 +21,7 @@
         }
         var hash = {
             'q':'https://www.qq.com',
-            'w':'https://www.qq.com',
+            'w':'https://www.xxx.com',
             't':'https://www.taobao.com',
             'y':'https://www.youtube.com',
             'i':'https://www.iqiyi.com',
@@ -29,26 +29,47 @@
             'z':'https://www.zhihu.com',
             'b':'https://www.bilibili.com',
         }
-        var hashInLocalStorage = JSON.parse(localStorage.getItem('temp') ||null)
+        var hashInLocalStorage = JSON.parse(localStorage.getItem('temp') ||'null')
         if(hashInLocalStorage){
             hash = hashInLocalStorage
         }
-        index1=0
-        while (index1 < 3) {
-            div = document.createElement('div')
+        var index1=0
+        while (index1 < keys['length']) {
+            var div = document.createElement('div')
+            div.className = 'row'
             main.appendChild(div)
-            row = keys[index1]
-            index2 = 0
+            var row = keys[index1]
+            var index2 = 0
             while (index2 < row['length']) {
-                kbd = document.createElement('kbd')
-                kbd.textContent = row[index2]
-                button = document.createElement('button')
+                var kbd = document.createElement('kbd')
+                kbd.className = 'key'
+                var span = document.createElement('span')
+                span.textContent = row[index2]
+                kbd.appendChild(span)
+                var button = document.createElement('button')
                 button.textContent = "编辑"
                 button.id = row[index2]
+                var img = document.createElement('img')
+                img.src = hash[row[index2]] + '/favicon.ico'
+                kbd.appendChild(img)
+                if(hash[row[index2]]){
+                    img.src = hash[row[index2]] + '/favicon.ico'
+                }else{
+                    img.src = './t.jpg'
+                }
+                img.onerror = function (xxx) {
+                    xxx.target.src = './t.jpg'
+                }
                 button.onclick = function(def){
-                    key = def.target.id
-                    x = prompt("请输入一个新的网址")
+                    var button2 = def['target']
+                    var img2 = button2.previousSibling
+                    var key = def.target.id
+                    var x = prompt("请输入一个新的网址")
                     hash[key] = x
+                    img2.src = x + '/favicon.ico'
+                    img2.onerror = function (xxx) {
+                        xxx.target.src = './t.jpg'
+                    }
                     localStorage.setItem('temp',JSON.stringify(hash))
                     console.log(hash)
                 }
@@ -59,8 +80,8 @@
             index1 = index1 + 1 
         }
         document.onkeypress = function(abc){
-            key = abc['key']
-            website = hash[key]
+            var key = abc['key']
+            var website = hash[key]
             window.open(website,'_blank')
         }
     </script>
