@@ -1,0 +1,28 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+#canvas{
+    background: white;
+}
+#tools{
+    position: fixed;
+    top: 20px;
+    left: 20px; 
+}
+#eraser,
+#pen{
+    width: 60px;
+    height: 35px;
+    border-radius: 7px;
+    font-size: 15px;
+}
+.tools #pen{
+    display: none;
+}
+.tools-x #pen{
+    display: inline-block;
+}
+.tools-x #eraser{
+    display: none;
+}
