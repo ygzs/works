@@ -36,6 +36,7 @@ for(var index=0;index<10;index++){
 //开始
 var mm = document.getElementById('canvas')
 var context = mm.getContext('2d')
+var lineWidth = 3
 var lastpoint = {x:undefined,y:undefined}
 
 //调整canvas大小
@@ -57,6 +58,35 @@ pen.onclick = function(){
     pen.classList.add('active')
     eraser.classList.remove('active')
 }
+
+//线条
+thin.onclick = function(){
+    lineWidth = 3
+    thin.classList.add('active')
+    thick.classList.remove('active')
+}
+thick.onclick = function(){
+    lineWidth = 7
+    thick.classList.add('active')
+    thin.classList.remove('active')
+}
+
+//清除
+clear.onclick = function(){
+    context.clearRect(0,0,mm.width,mm.height)
+}
+
+//保存
+save.onclick = function(){
+    var url = mm.toDataURL("image/png")
+    var a = document.createElement('a')
+    document.body.appendChild(a)
+    a.href = url
+    a.download = "我的图片"
+    a.target = '_blank'
+    a.click()
+}
+
 
 //判断设备
 if ( document.body.ontouchstart !== undefined ) {           //手机
@@ -138,7 +168,7 @@ function line(x1,y1,x2,y2) {
     context.beginPath()
     context.strokeStyle = zzz
     context.moveTo(x1,y1)
-    context.lineWidth = 3
+    context.lineWidth = lineWidth
     context.lineTo(x2,y2)
     context.stroke()
     context.closePath()
