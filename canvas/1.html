@@ -12,11 +12,41 @@
         <button id="eraser">橡皮擦</button>
         <button id="pen">画笔</button>
     </div>
+    <div id="colour"></div>
     <script>
-
+        var keys = {
+            0:'0',1:'1',2:'2',3:'3',4:'4',5:'5',6:'6',7:'7',8:'8',9:'9',length:10
+        }
+        var hash = {
+            '0' : 'black' ,
+            '1' : 'grey' ,
+            '2' : 'red' ,
+            '3' : 'yellow' ,
+            '4' : 'green' ,
+            '5' : 'blue' ,
+            '6' : 'orange' ,
+            '7' : 'brown' ,
+            '8' : 'pink' ,
+            '9' : 'purple' ,
+        }
+        var zzz
+        for(var index=0;index<10;index++){
+            var row = keys[index]
+            var button = document.createElement('button')
+            button.id = row
+            button.style.backgroundColor = hash[index]
+            colour.appendChild(button) 
+            button.onclick = function(abc){
+                var xxx = abc['target']
+                var yyy = xxx.id
+                zzz = hash[yyy]
+                //console.log(zzz)
+            } 
+        }
+        
 
         var mm = document.getElementById('canvas')
-        page ()
+            page ()
         window.onresize = function(){
             page()
         }
@@ -34,9 +64,6 @@
             tools.className = 'tools'
         }
         
-
-
-
         //按下鼠标
         mm.onmousedown = function(a){
             var x = a.clientX
@@ -46,23 +73,19 @@
                 context.clearRect(x-10,y-10,20,20)
             }
             else{
-                lastpoint = {'x':x,'y':y}
+                lastpoint = {'x':x,'y':y}}
             }
-         }
-
-
-
-
 
         //移动鼠标
         mm.onmousemove = function(b){
             var x = b.clientX
             var y = b.clientY
+            var i 
             if(flag){
                 if(useEraser){
                     context.clearRect(x-10,y-10,20,20)
                 }
-                else{
+                else{       
                     var newpoint = {'x':x,'y':y}
                     line(lastpoint.x,lastpoint.y,newpoint.x,newpoint.y)
                     lastpoint = newpoint
@@ -70,13 +93,11 @@
             }
         }
 
-
-
-
         //离开鼠标
         mm.onmouseup = function(c){
             flag = false
         }
+
         //函数
         function page() {
             var pageheight = document.documentElement.clientHeight
@@ -86,7 +107,7 @@
         }
         function line(x1,y1,x2,y2) {
             context.beginPath()
-            context.strokeStyle = 'black'
+            context.strokeStyle = zzz
             context.moveTo(x1,y1)
             context.lineWidth = 3
             context.lineTo(x2,y2)
