@@ -1,6 +1,15 @@
+.icon {
+    width: 1em; height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+ }
 *{
     margin: 0px;
     padding: 0px;
+}
+body{
+    overflow: hidden;
 }
 #canvas{
     background: white;
@@ -8,23 +17,17 @@
 #tools{
     position: fixed;
     top: 20px;
-    left: 30px; 
+    left: 20px; 
 }
-#eraser,
-#pen{
-    width: 60px;
+#tools svg{
     height: 35px;
-    border-radius: 7px;
-    font-size: 15px;
+    width: 35px;
+    margin: 0px 10px;
+    transition: all 0.3s;
 }
-.tools #pen{
-    display: none;
-}
-.tools-x #pen{
-    display: inline-block;
-}
-.tools-x #eraser{
-    display: none;
+#tools svg.active{
+    transform: scale(1.2);
+    fill: red;
 }
 #colour{
     position: fixed;
@@ -34,8 +37,12 @@
 #colour button{
     width: 30px;
     height: 30px;
-    border-radius: 5px;
+    border-radius: 50%;
     font-size: 15px;
     margin: 0px 10px;
     border: none;
+    transition: all 0.3s;
+}
+#colour button.active{
+    transform: scale(1.2);
 }
