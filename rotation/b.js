@@ -33,3 +33,14 @@ for (let i = 0; i < allbuttons.length; i++) {
         })
     })   
 }
+var n = 0
+var size = allbuttons.length
+allbuttons.eq(n%size).trigger('click')
+    .addClass('red')
+    .siblings('.red').removeClass('red')
+setInterval( () => {
+    n += 1
+    allbuttons.eq(n % size).trigger('click')
+        .addClass('red')
+        .siblings('.red').removeClass('red')    
+},1000)
