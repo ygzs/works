@@ -1,0 +1,12 @@
+.windows{
+    width: 720px;
+    height: 450px;
+    overflow: hidden;
+}
+.images{
+    display: flex;
+    align-items: flex-start;
+}
+button{
+    margin-top: 20px;
+}
