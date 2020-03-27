@@ -31,16 +31,39 @@ for (let i = 0; i < allbuttons.length; i++) {
         $(images).css({
             transform:'translateX(' + s + 'px)'
         })
+        n = index
+        activebutton(allbuttons.eq(n))
     })   
 }
+
 var n = 0
 var size = allbuttons.length
-allbuttons.eq(n%size).trigger('click')
+
+play(n%size)
+
+var timer = setTimer()
+
+$('.windows').on('mouseenter',function(){
+    window.clearInterval(timer)
+})
+
+$('.windows').on('mouseleave',function(){
+    timer = setTimer()
+})
+
+
+//函数
+function activebutton($button){
+    $button
     .addClass('red')
     .siblings('.red').removeClass('red')
-setInterval( () => {
-    n += 1
-    allbuttons.eq(n % size).trigger('click')
-        .addClass('red')
-        .siblings('.red').removeClass('red')    
-},1000)
+}
+function play(index){
+    allbuttons.eq(index).trigger('click')  
+}
+function setTimer(){
+    return setInterval( () => {
+        n += 1
+        play(n%size)   
+    },1000)    
+}
