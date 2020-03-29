@@ -1,3 +1,7 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
 .red{
     color: red;
 }
@@ -5,11 +9,13 @@
     width: 720px;
     height: 450px;
     overflow: hidden;
+    margin: 50px auto;
 }
 .images{
     display: flex;
     align-items: flex-start;
 }
-button{
-    margin-top: 20px;
+#buttons{
+    margin-top: -20px;
+    text-align: center;
 }
