@@ -1,71 +1,77 @@
-$('.images > img:nth-child(1)').addClass('current')
-$('.images > img:nth-child(2)').addClass('enter')
-$('.images > img:nth-child(3)').addClass('enter')
-$('.images > img:nth-child(4)').addClass('enter')
-$('.images > img:nth-child(5)').addClass('enter')
+let $firstimg = $('#images > img').eq(0).clone(true)
+let $lastimg = $('#images > img').eq(4).clone(true)
 
-let n = 1
+$('#images').css({
+    transform: 'translateX(-400px)'
+})
 
+$('#images').append($firstimg)
+$('#images').prepend($lastimg)
 
-/*setInterval( ()=>{
-    $(`img:nth-child(${x(n)})`).removeClass('current enter').addClass('leave')
-     .one('transitionend',(a)=>{
-         $(a.currentTarget).removeClass('current leave').addClass('enter')
-     })
-     $(`img:nth-child(${x(n+1)})`).removeClass('leave enter').addClass('current')
-     n=n+1
-},3000)*/
+let current = 0
 
+$('#buttons>button').on('click',function(x){
+    let index = $(x.currentTarget).index()
+    goto(index)
+})
 
-let timer = setInterval( () =>{
-    makeLeave(getn(n))
-     .one('transitionend',(e) => {
-            makeEnter($(e.currentTarget))
-        })
-        makeCurrent(getn(n+1))
-    n += 1
+$('.previous').on('click',function(){
+    goto(current-1)
+})
+$('.next').on('click',function(){
+    goto(current+1)
+})
+
+setInterval(function(){
+    goto(current+1)
 },2000)
 
-
-document.addEventListener('visibilitychange', function() {
-    if( document.hidden ){
-        window.clearInterval(timer)
+//
+function goto(index){
+    if(index > $('#buttons>button').length-1){
+        index = 0
+    }
+    else if(index < 0){
+        index = $('#buttons>button').length-1
+    }
+    if(current === $('#buttons>button').length-1 && index === 0){
+        $('#images').css({
+            transform: 'translateX( ' +(current+2) * -400+ 'px)'
+        })
+        .one('transitionend',function(){
+            $('#images').hide()
+                .offset()
+            $('#images').css({
+                transform: 'translateX( ' +(index+1) * -400+ 'px)'
+            })
+            .show()   
+        })
+    }
+    else if(current === 0 && index === $('#buttons>button').length-1){
+        $('#images').css({
+            transform: 'translateX(0px)'
+        })
+        .one('transitionend',function(){
+            $('#images').hide()
+                .offset()
+            $('#images').css({
+                transform: 'translateX( ' +(index+1) * -400+ 'px)'
+            })
+            .show()   
+        })
     }
     else{
-        timer = setInterval( () =>{
-            makeLeave(getn(n))
-             .one('transitionend',(e) => {
-                    makeEnter($(e.currentTarget))
-                })
-                makeCurrent(getn(n+1))
-            n += 1
-        },2000)        
+        $('#images').css({
+            transform: 'translateX( ' +(index+1) * -400+ 'px)'
+        })
     }
-  })
-
-
-function getn(n){
-    return $(`img:nth-child(${x(n)})`)
-}
-
-function x(a){
-    if(a>5){
-        a=a%5
-        if(a===0){
-            a=5
-        }
-    }
-    return a
+    current = index
 }
 
 
-function makeCurrent($node){
-    $node.removeClass('leave enter').addClass('current')
-}
-function makeEnter($node){
-    $node.removeClass('leave current').addClass('enter')
-}
-function makeLeave($node){
-    $node.removeClass('current enter').addClass('leave')
-    return $node
-}
+
+
+
+
+
+
