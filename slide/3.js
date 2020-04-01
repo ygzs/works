@@ -17,16 +17,31 @@ let n = 1
 },3000)*/
 
 
-setInterval( () =>{
+let timer = setInterval( () =>{
     makeLeave(getn(n))
      .one('transitionend',(e) => {
             makeEnter($(e.currentTarget))
         })
         makeCurrent(getn(n+1))
     n += 1
-},3000)
+},2000)
 
 
+document.addEventListener('visibilitychange', function() {
+    if( document.hidden ){
+        window.clearInterval(timer)
+    }
+    else{
+        timer = setInterval( () =>{
+            makeLeave(getn(n))
+             .one('transitionend',(e) => {
+                    makeEnter($(e.currentTarget))
+                })
+                makeCurrent(getn(n+1))
+            n += 1
+        },2000)        
+    }
+  })
 
 
 function getn(n){
@@ -42,6 +57,7 @@ function x(a){
     }
     return a
 }
+
 
 function makeCurrent($node){
     $node.removeClass('leave enter').addClass('current')
