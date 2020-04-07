@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>try</title>
 </head>
 <body>
     <button id="button">点击</button>
 
     <script>
-        button.addEventListener('click',function(){
+        /*button.addEventListener('click',function(){
             let request = new XMLHttpRequest
             request.open('get','/xxx')
             request.send()
@@ -25,12 +26,78 @@
                         let object = window.JSON.parse(string)//把符合 JSON 语法的字符串转换成 JS 对应的值
                         console.log(object)
                     }
-                    else if(request.readyState >=400){
+                    else if(request.status >=400){
                         console.log('请求失败');
                         
                     }
                 }
             }
+        })*/
+
+
+        //自己简单封装的AJAX 
+        /*window.jQuery.ajax = function({url,method,body,headers,successFn,failFn}){
+            let request = new XMLHttpRequest
+            request.open(method,url)
+            for(let key in headers){
+                let value = headers[key]
+                request.setRequestHeader(key,value)
+            }
+            request.onreadystatechange = () => {
+                if(request.readyState === 4){
+                    if(request.status >= 200 && request.status <= 300){
+                        successFn.call(undefined,request.responseText)
+                    }
+                    else if(request.status >=400){
+                        failFn.call(undefined,request)
+                    }
+                }
+            }
+            request.send(body)
+        }
+
+        button.addEventListener('click',function(){
+            let obj = {
+                'url':'/xxx',
+                'method':'post',
+                'body':'a=1&b=2',
+                'headers':{
+                    'content-typr':'x-www-form-urlencode',
+                    'ygzs':'18'
+                },
+                'successFn':(x) =>{
+                    console.log(x);
+                },
+                'failFn':(x) => {
+                    console.log(x);
+                    console.log(x.status);
+                    console.log(x.statusText);
+                },
+            }
+            window.jQuery.ajax(obj)
+        })*/
+
+
+        //jquery的AJAX  promise
+        button.addEventListener('click',function(){
+            $.ajax({
+                url:'/xxx',
+                method:'post'
+            }).then(
+                (x) =>{console.log(x)},
+                (x) => {
+                    console.log(x)
+                    console.log(x.status)
+                    console.log(x.statusText)
+                }
+            ).then(
+                (上一次处理结果) =>{
+                    console.log('成功')
+                },
+                (上一次处理结果) =>{
+                    console.log('失败')
+                }
+            )
         })
     </script>
 </body>
