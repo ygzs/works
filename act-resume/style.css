@@ -9,3 +9,11 @@
 .token.property{
   color: black;
 }
+#words{
+  height: 100vh;
+  overflow: hidden;
+  font-size: 16px;
+}
+#content{
+  font-size: 16px;
+}
