@@ -1,19 +1,11 @@
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 .token.selector{
-  color: black;
+color: white;
 }
 .token.property{
-  color: black;
-}
-#words{
-  height: 100vh;
-  overflow: hidden;
-  font-size: 16px;
-}
-#content{
-  font-size: 16px;
+color: white;
 }
