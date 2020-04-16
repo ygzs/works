@@ -9,6 +9,7 @@ var result = `/**面试官你好，我是XXX
 */
 html{
     background-color: rgb(45,45,45);
+    color: white;
 }
 
 *{
@@ -18,14 +19,14 @@ html{
 #words{
     height: 100vh;
     overflow: auto;
-    font-size: 14px;
+    font-size: 16px;
     font-family: 'Times New Roman';
+    line-height: 1.5em;
     padding: 30px;
-    color: white;
     position: fixed;
     left: 0px;
     width: 50%;
-    border: 2px solid white;
+    border: 1px solid white;
 }
 
 /*我需要高亮一些代码*/
@@ -48,12 +49,12 @@ html{
 
 var result2 = `
 #paper{
+    background-color: darkgrey;
     position: fixed;
     right: 0px;
     width: 50%;
     height: 100%;
-    padding: 20px;
-    background-color: darkgrey;
+    padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,19 +62,22 @@ var result2 = `
 
 /*再来一张白纸*/
 #content{
+    background-color: white;
+    border-radius: 10px;
     font-size: 20px;
     font-family: 'KaiTi';
+    overflow: auto;
     width: 100%;
     height: 100%;
-    background-color: white;
     padding-left: 16px;
+    color: black;
 }
 
 /*开始*/
 `
+
 var result3 = `
 # 自我介绍
-
 大家好！
 我叫 zp
 1997 年 6 月 1 日出生
@@ -82,11 +86,9 @@ var result3 = `
 希望应聘前端开发岗位
 
 # 技能介绍
-
 熟悉 JS CSS HTML
 
 # 项目介绍
-
 1. 无缝轮播
 2. 个人简历
 3. 自制画板
@@ -95,8 +97,23 @@ var result3 = `
 - QQ xxxxxxxx
 - Email xxxxxxxx
 - 手机 xxxxxxx
-
 `
+
+var result4 = `
+/*把markdown变成html格式*/
+
+/*调整一下简历的样式*/
+
+p,ol,ul{
+    margin-left: 1em;
+}
+p{
+    line-height: 1.5em;
+}
+
+/*谢谢观看！*/
+`
+
 
 
 
@@ -111,7 +128,7 @@ function writeleft(preview,text,fn){
             window.clearInterval(timer)
             fn&&fn.call()
         }
-    },10) 
+    },15) 
 }
 
 
@@ -136,15 +153,25 @@ function writeright(text,fn){
             window.clearInterval(timer)
             fn&&fn.call()
         }
-    },10) 
+    },20) 
 }
 
-
+function markdownToHtml(text,fn){
+    setTimeout( ()=>{
+        content.innerHTML = marked(text)
+        content.scrollTop = content.scrollHeight
+        fn&&fn.call()
+    },20)
+}
 
 writeleft('', result, ()=>{
     createPaper( () => {
         writeleft(result, result2, ()=>{
-            writeright(result3)
+            writeright(result3, ()=>{
+                markdownToHtml(result3, ()=>{
+                    writeleft(result+result2,result4)
+                })
+            })
         })   
     })   
 })

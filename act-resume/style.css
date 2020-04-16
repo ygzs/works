@@ -3,9 +3,16 @@
   padding: 0;
   box-sizing: border-box;
 }
+ol,
+ul{
+  list-style: none;
+}
+::-webkit-scrollbar{
+  width: 0px;
+}
 .token.selector{
-color: white;
+  color: white;
 }
 .token.property{
-color: white;
+  color: white;
 }
