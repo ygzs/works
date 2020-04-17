@@ -149,20 +149,41 @@
     background-color: rgb(255,72,95);
 }
 `
-
+let control = 15
 function writeleft(preview,text,fn){
     let n = 0
-    let timer = setInterval( () => {
+    let timer
+    timer = setTimeout( function run(){
         n += 1
         words.innerHTML = text.substring(0,n)
         style.innerHTML = text.substring(0,n)
         words.scrollTop = words.scrollHeight
-        if (n>=text.length) {
-            window.clearInterval(timer)
+        if (n<=text.length) {
+            timer = setTimeout(run,control)
             fn&&fn.call()
         }
-    },15) 
+    },control) 
 }
+
+$('.buttons').on('click','button',(x)=>{
+    let $button = $(x.currentTarget)
+    let speed = $button.attr('data-speed')
+    $button.addClass('active')
+            .siblings('.active').removeClass('active')
+    switch (speed) {
+        case 'slow':
+            control = 100
+            break;
+        case 'normal':
+            control = 15
+            break;
+        case 'fast':
+            control = 5
+        break;
+        default:
+            break;
+    }
+})
 
 writeleft('',result)
 }.call()

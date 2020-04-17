@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>Pikachu</title>
     <style id="style"></style>
 </head>
@@ -22,7 +23,12 @@
             <div class="lip left"></div>
             <div class="lip right"></div>
         </div>
-    </div>  
+    </div>
+    <div class="buttons">
+        <button data-speed="slow">慢速</button>
+        <button data-speed="normal" class="active">中速</button>
+        <button data-speed="fast">快速</button>
+    </div>
     <script src="./main.js"></script>
 </body>
 </html>
