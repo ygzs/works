@@ -7,45 +7,98 @@
     <title>try</title>
 </head>
 <body>
-    <h5>账户余额
-        <span id="amount">&&&amount&&&</span>
-    </h5>
-    <button id="button">付款</button>
-
+    <h1>welcome</h1>
 
     <script>
-       /*button.addEventListener('click', (e)=>{
-            let script = document.createElement('script')
-            let functionName = 'ygzs'+ parseInt(Math.random()*10000000 ,10)
-            window[functionName] = function(result){  
-                amount.innerText = amount.innerText - 0 - 1
-            }
-            script.src = '/pay?callback=' + functionName
-            document.body.appendChild(script)
-            script.onload = function(e){ 
-                e.currentTarget.remove()
-                delete window[functionName] 
-            }
-            script.onload = function(e){ 
-                e.currentTarget.remove()
-                delete window[functionName] 
+        /*button.addEventListener('click',function(){
+            let request = new XMLHttpRequest
+            request.open('get','/xxx')
+            request.send()
+            request.onreadystatechange = () => {
+                if(request.readyState === 4){
+                    console.log('请求响应完毕')
+                    console.log(request.readyState);
+                    if(request.status >= 200 && request.status <= 300){
+                        console.log('说明请求成功')
+                        console.log(typeof request.responseText)
+                        console.log(request.responseText)                        
+                        let string = request.responseText
+                        let object = window.JSON.parse(string)//把符合 JSON 语法的字符串转换成 JS 对应的值
+                        console.log(object)
+                    }
+                    else if(request.status >=400){
+                        console.log('请求失败');
+                        
+                    }
+                }
             }
         })*/
-        button.addEventListener('click', (e)=>{
+
+
+        //自己简单封装的AJAX 
+        /*window.jQuery.ajax = function({url,method,body,headers,successFn,failFn}){
+            let request = new XMLHttpRequest
+            request.open(method,url)
+            for(let key in headers){
+                let value = headers[key]
+                request.setRequestHeader(key,value)
+            }
+            request.onreadystatechange = () => {
+                if(request.readyState === 4){
+                    if(request.status >= 200 && request.status <= 300){
+                        successFn.call(undefined,request.responseText)
+                    }
+                    else if(request.status >=400){
+                        failFn.call(undefined,request)
+                    }
+                }
+            }
+            request.send(body)
+        }
+        button.addEventListener('click',function(){
+            let obj = {
+                'url':'/xxx',
+                'method':'post',
+                'body':'a=1&b=2',
+                'headers':{
+                    'content-typr':'x-www-form-urlencode',
+                    'ygzs':'18'
+                },
+                'successFn':(x) =>{
+                    console.log(x);
+                },
+                'failFn':(x) => {
+                    console.log(x);
+                    console.log(x.status);
+                    console.log(x.statusText);
+                },
+            }
+            window.jQuery.ajax(obj)
+        })*/
+
+
+        //jquery的AJAX  promise
+        /*button.addEventListener('click',function(){
             $.ajax({
-	        url: "/pay",
-	        dataType: "jsonp",
-	        success: function( response ) {
-	            if(response === 'success'){
-	                amount.innerText = amount.innerText - 1
-	            }
-	        }
-	         })
+                url:'/xxx',
+                method:'post'
+            }).then(
+                (x) =>{console.log(x)},
+                (x) => {
+                    console.log(x)
+                    console.log(x.status)
+                    console.log(x.statusText)
+                }
+            ).then(
+                (上一次处理结果) =>{
+                    console.log('成功')
+                },
+                (上一次处理结果) =>{
+                    console.log('失败')
+                }
+            )
         })
-
-
-
-
+        */
     </script>
 </body>
 </html>

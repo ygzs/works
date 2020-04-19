@@ -23,30 +23,36 @@ var server = http.createServer(function(request, response){
 
   if(path === '/'){
     var string = fs.readFileSync('./index.html','utf8')
-    var amount = fs.readFileSync('./db','utf8')
-    string = string.replace('&&&amount&&&',amount)
     response.setHeader('Content-Type', 'text/html;charset=utf-8')
     response.write(string)
     response.end()
-  } else if(path === '/x'){
+  }
+  else if(path === '/sign-up'){
+    var string = fs.readFileSync('./sign-up.html','utf8')
     response.statusCode = 200
-    response.setHeader('Content-Type', 'text/css;charset=utf-8')
-    response.write(`body{color: red;}`)
+    response.setHeader('Content-Type', 'text/html;charset=utf-8')
+    response.write(string)
     response.end()
-  } else if(path === '/pay'){
-
-
-
-      let amount = fs.readFileSync('./db', 'utf8')
-      amount -= 1
-      fs.writeFileSync('./db', amount)
-      response.setHeader('Content-Type', 'application/javascript')
-      response.write(`
-          ${query.callback}.call(undefined, 'success')
-      `)
-      response.end()
-  
-
+  }
+  else if(path === '/sign-up' && method === 'post'){
+    response.statusCode = 200
+    response.end()
+  }
+  else if(path === '/xxx'){
+    response.statusCode = 200
+    response.setHeader('Content-Type','text/json;charset=utf-8')
+    response.setHeader('Access-Control-Allow-Origin', 'http://xxx.com')
+    response.write(`
+    {
+      "note":{
+        "to": "小明",
+        "from": "小红",
+        "heading": "问候",
+        "content": "hello"
+      }
+    }
+    `)
+    response.end()
   } else {
     response.statusCode = 404
     response.setHeader('Content-Type', 'text/html;charset=utf-8')

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <title>注册</title>
+</head>
+<body>
+    <div class="wapper">
+        <h1>注册</h1>
+        <form id="SignUpForm">
+            <div>
+                <label>邮箱</label>
+                <input type="text" name="email">
+            </div>
+            <div>
+                <label>密码</label>
+                <input type="password" name="password">
+            </div>
+            <div>
+                <label>确认密码</label>
+                <input type="password" name="password-confirmation">
+            </div>
+            <div>
+                <input type="submit" value="注册">
+            </div>
+        </form>
+    </div>
+    <script>
+        $('#SignUpForm').on('submit',(x)=>{
+            x.preventDefault()
+            let hash = {}
+            let need = ['email','password','password-confirmation']
+            need.forEach((name)=>{
+                let value =  $('#SignUpForm').find(`[name=${name}]`).val()
+                hash[name] = value
+            })
+            $.post('/sign-up',hash)
+            .then(()=>{
+                console.log('success')
+            },
+            ()=>{
+                console.log('error')
+            })   
+        })
+    </script>
+</body>
+</html>

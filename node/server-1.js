@@ -22,26 +22,31 @@ var server = http.createServer(function(request, response){
   console.log('路径为：' + pathWithQuery)
 
   if(path === '/'){
-    var string = fs.readFileSync('./AJAX.html','utf8')
+    var string = fs.readFileSync('./index-1.html','utf8')
+    var amount = fs.readFileSync('./db','utf8')
+    string = string.replace('&&&amount&&&',amount)
     response.setHeader('Content-Type', 'text/html;charset=utf-8')
     response.write(string)
     response.end()
-  }
-  else if(path === '/xxx'){
+  } else if(path === '/x'){
     response.statusCode = 200
-    response.setHeader('Content-Type','text/json;charset=utf-8')
-    response.setHeader('Access-Control-Allow-Origin', 'http://xxx.com')
-    response.write(`
-    {
-      "note":{
-        "to": "小明",
-        "from": "小红",
-        "heading": "问候",
-        "content": "hello"
-      }
-    }
-    `)
+    response.setHeader('Content-Type', 'text/css;charset=utf-8')
+    response.write(`body{color: red;}`)
     response.end()
+  } else if(path === '/pay'){
+
+
+
+      let amount = fs.readFileSync('./db', 'utf8')
+      amount -= 1
+      fs.writeFileSync('./db', amount)
+      response.setHeader('Content-Type', 'application/javascript')
+      response.write(`
+          ${query.callback}.call(undefined, 'success')
+      `)
+      response.end()
+  
+
   } else {
     response.statusCode = 404
     response.setHeader('Content-Type', 'text/html;charset=utf-8')
