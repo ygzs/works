@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <title>注册</title>
+    <title>登录</title>
     <style>
         *{
          margin: 0;
@@ -34,7 +34,7 @@
 </head>
 <body>
     <div class="wapper">
-        <h1>注册</h1>
+        <h1>登录</h1>
         <form id="SignInForm">
             <div>
                 <label>邮箱</label>
@@ -47,12 +47,7 @@
                 <span class="error"></span>
             </div>
             <div>
-                <label>确认密码</label>
-                <input type="password" name="password_confirmation">
-                <span class="error"></span>
-            </div>
-            <div>
-                <input type="submit" value="注册">
+                <input type="submit" value="登录">
             </div>
         </form>
     </div>
@@ -61,7 +56,7 @@
         $('#SignInForm').on('submit',(x)=>{
             x.preventDefault()
             let hash = {}
-            let need = ['email','password','password_confirmation']
+            let need = ['email','password']
             need.forEach((name)=>{
                 let value =  $form.find(`[name=${name}]`).val()
                 hash[name] = value
@@ -79,27 +74,12 @@
                 .text('填密码呀兄弟')
                 return
             }
-            if(hash['password_confirmation'] === ''){
-                $form.find('[name="password_confirmation"]').siblings('.error')
-                .text('确认密码呀兄弟')
-                return
-            }
-            if(hash['password'] !== hash['password_confirmation']){
-                $form.find('[name="password_confirmation"]').siblings('.error')
-                .text('密码不匹配')
-                return
-            }
-            $.post('/sign-up',hash)
+            $.post('/sign-in',hash)
             .then(()=>{
-                window.location.href = '/sign-in'
-                alert('注册成功')
+                window.location.href = '/'
             },
             (request)=>{
-                let {errors} = request.responseJSON
-                if(errors.email && errors.email === 'invalid'){
-                    $form.find(`[name='email']`).next()
-                    .text('邮箱格式错误!')
-                }
+                alert('登录失败')
             })
         })
     </script>

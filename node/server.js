@@ -23,6 +23,33 @@ var server = http.createServer(function(request, response){
 
   if(path === '/'){
     var string = fs.readFileSync('./index.html','utf8')
+    let cookies =  request.headers.cookie.split('; ')
+    let hash = {}
+    for(let i =0;i<cookies.length; i++){
+      let parts = cookies[i].split('=')
+      let key = parts[0]
+      let value = parts[1]
+      hash[key] = value 
+    }
+    console.log(hash)
+    
+    let email = hash.sign_in_email
+    let users = fs.readFileSync('./users', 'utf8')
+    users = JSON.parse(users)
+    let foundUser
+    for(let i=0; i< users.length; i++){
+      if(users[i].email === email){
+        foundUser = users[i]
+        break
+      }
+    }
+    console.log(foundUser)
+    if(foundUser){
+      string = string.replace('***username***', foundUser.email)
+    }else{
+      string = string.replace('***username***', '不知道')
+    }
+    response.statusCode = 200
     response.setHeader('Content-Type', 'text/html;charset=utf-8')
     response.write(string)
     response.end()
@@ -42,7 +69,7 @@ var server = http.createServer(function(request, response){
         let parts = string.split('=')
         let key = parts[0]
         let value = parts[1]
-        hash[key] = value
+        hash[key] = decodeURIComponent(value)
       })
       let {email,password,password_confirmation} = hash
       if(email.indexOf('@') === -1){
@@ -57,7 +84,70 @@ var server = http.createServer(function(request, response){
         response.statusCode = 400
         response.write('password not match')
       }else{
+        var users = fs.readFileSync('./users','utf8')
+        try{
+          users = JSON.parse(users) 
+        }catch(exception){
+          users = []
+        }
+        let flag = false
+        for(let i=0; i<users.length; i++){
+          let user = users[i]
+          if(user.email === email){
+            flag = true
+            break;
+          }
+        }
+        if(flag){
+          response.statusCode = 400
+          response.write('email in use')
+          }
+          else{
+          users.push({email:email,password:password})
+          var usersString = JSON.stringify(users)
+          fs.writeFileSync('./users', usersString)
           response.statusCode = 200
+          }
+        }
+      response.end()
+    })
+  }
+  else if(path === '/sign-in' && method === 'GET'){
+    var string = fs.readFileSync('./sign-in.html','utf8')
+    response.statusCode = 200
+    response.setHeader('Content-Type', 'text/html;charset=utf-8')
+    response.write(string)
+    response.end()
+  }
+  else if(path === '/sign-in' && method === 'POST'){
+    readbody(request).then((body)=>{
+      let hash = {}
+      let strings = body.split('&')
+      strings.forEach((string) => {
+        let parts = string.split('=')
+        let key = parts[0]
+        let value = parts[1]
+        hash[key] = decodeURIComponent(value)
+      })
+      let {email,password} = hash
+      var users = fs.readFileSync('./users','utf8')
+      try{
+        users = JSON.parse(users) 
+      }catch(exception){
+        users = []
+      }
+      let found
+      for(let i=0;i<users.length; i++){
+        if(users[i].email === email && users[i].password === password){
+         found = true
+          break
+        }
+      }
+      if(found){
+        response.setHeader('Set-Cookie', `sign_in_email=${email}`)
+        response.statusCode = 200
+      }else{
+        response.statusCode = 401
       }
       response.end()
     })
