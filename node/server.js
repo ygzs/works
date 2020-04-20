@@ -27,16 +27,40 @@ var server = http.createServer(function(request, response){
     response.write(string)
     response.end()
   }
-  else if(path === '/sign-up'){
+  else if(path === '/sign-up' && method === 'GET'){
     var string = fs.readFileSync('./sign-up.html','utf8')
     response.statusCode = 200
     response.setHeader('Content-Type', 'text/html;charset=utf-8')
     response.write(string)
     response.end()
   }
-  else if(path === '/sign-up' && method === 'post'){
-    response.statusCode = 200
-    response.end()
+  else if(path === '/sign-up' && method === 'POST'){
+    readbody(request).then((body)=>{
+      let hash = {}
+      let strings = body.split('&')
+      strings.forEach((string) => {
+        let parts = string.split('=')
+        let key = parts[0]
+        let value = parts[1]
+        hash[key] = value
+      })
+      let {email,password,password_confirmation} = hash
+      if(email.indexOf('@') === -1){
+        response.statusCode = 400
+        response.setHeader('Content-Type', 'application/json;charset=utf-8')
+        response.write(`{
+          "errors": {
+            "email": "invalid"
+          }
+        }`)
+      }else if(password !== password_confirmation){
+        response.statusCode = 400
+        response.write('password not match')
+      }else{
+          response.statusCode = 200
+      }
+      response.end()
+    })
   }
   else if(path === '/xxx'){
     response.statusCode = 200
@@ -62,6 +86,16 @@ var server = http.createServer(function(request, response){
 
   /******** 代码结束，下面不要看 ************/
 })
-
+function readbody(request){
+  return new Promise((resolve,reject)=>{
+    let body = []
+    request.on('data', (chunk) => {
+      body.push(chunk)
+    }).on('end', () => {
+      body = Buffer.concat(body).toString()
+      resolve(body)
+    })
+  })
+}
 server.listen(port)
 console.log('监听 ' + port + ' 成功\n请用在空中转体720度然后用电饭煲打开 http://localhost:' + port)

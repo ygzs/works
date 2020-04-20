@@ -4,8 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="./style.css">
     <title>注册</title>
+    <style>
+        *{
+         margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+        body{
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border: 1px solid red;
+        }
+        .wapper{
+        padding: 20px 100px;
+        border: 1px solid gray;
+        }
+        .wapper div{
+        margin: 20px 0px;
+        }
+        .wapper label{
+        display: inline-block;
+        width: 4em;
+        }
+    </style>
 </head>
 <body>
     <div class="wapper">
@@ -14,14 +39,17 @@
             <div>
                 <label>邮箱</label>
                 <input type="text" name="email">
+                <span class="error"></span>
             </div>
             <div>
                 <label>密码</label>
                 <input type="password" name="password">
+                <span class="error"></span>
             </div>
             <div>
                 <label>确认密码</label>
                 <input type="password" name="password-confirmation">
+                <span class="error"></span>
             </div>
             <div>
                 <input type="submit" value="注册">
@@ -29,21 +57,49 @@
         </form>
     </div>
     <script>
+        let $form = $('#SignUpForm')
         $('#SignUpForm').on('submit',(x)=>{
             x.preventDefault()
             let hash = {}
             let need = ['email','password','password-confirmation']
             need.forEach((name)=>{
-                let value =  $('#SignUpForm').find(`[name=${name}]`).val()
+                let value =  $form.find(`[name=${name}]`).val()
                 hash[name] = value
             })
+            $form.find('.error').each((index, span)=>{
+                $(span).text('')
+            })
+            if(hash['email'] === ''){
+                $form.find('[name="email"]').siblings('.error')
+                    .text('填邮箱呀兄弟')
+                return
+            }
+            if(hash['password'] === ''){
+                $form.find('[name="password"]').siblings('.error')
+                .text('填密码呀兄弟')
+                return
+            }
+            if(hash['password-confirmation'] === ''){
+                $form.find('[name="password-confirmation"]').siblings('.error')
+                .text('确认密码呀兄弟')
+                return
+            }
+            if(hash['password'] !== hash['password-confirmation']){
+                $form.find('[name="password-confirmation"]').siblings('.error')
+                .text('密码不匹配')
+                return
+            }
             $.post('/sign-up',hash)
             .then(()=>{
                 console.log('success')
             },
-            ()=>{
-                console.log('error')
-            })   
+            (request)=>{
+                let {errors} = request.responseJSON
+                if(errors.email && errors.email === 'invalid'){
+                    $form.find(`[name='email']`).next()
+                    .text('邮箱格式错误!')
+                }
+            })
         })
     </script>
 </body>
