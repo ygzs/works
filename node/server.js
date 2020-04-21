@@ -3,6 +3,8 @@ var fs = require('fs')
 var url = require('url')
 var port = process.argv[2]
 
+let sessions = {}
+
 if(!port){
   console.log('请指定端口号好不啦？\nnode server.js 8888 这样不会吗？')
   process.exit(1)
@@ -21,9 +23,20 @@ var server = http.createServer(function(request, response){
 
   console.log('路径为：' + pathWithQuery)
 
-  if(path === '/'){
+  if(path === '/style.css'){
+    var string = fs.readFileSync('./style.css','utf8')
+    response.statusCode = 200
+    response.setHeader('Content-Type', 'text/css;charset=utf-8')
+    response.setHeader('Cache-Control', 'max-age=30')
+    response.write(string)
+    response.end()
+  }
+  else if(path === '/'){
     var string = fs.readFileSync('./index.html','utf8')
-    let cookies =  request.headers.cookie.split('; ')
+    let cookies = ''
+    if (request.headers.cookie) {
+      cookies =  request.headers.cookie.split('; ')
+    }
     let hash = {}
     for(let i =0;i<cookies.length; i++){
       let parts = cookies[i].split('=')
@@ -32,8 +45,12 @@ var server = http.createServer(function(request, response){
       hash[key] = value 
     }
     console.log(hash)
-    
-    let email = hash.sign_in_email
+
+    let mysession = sessions[hash.sessionId]
+    let email
+    if (mysession) {
+      email = mysession.sign_in_email
+    }
     let users = fs.readFileSync('./users', 'utf8')
     users = JSON.parse(users)
     let foundUser
@@ -44,6 +61,7 @@ var server = http.createServer(function(request, response){
       }
     }
     console.log(foundUser)
+
     if(foundUser){
       string = string.replace('***username***', foundUser.email)
     }else{
@@ -144,7 +162,9 @@ var server = http.createServer(function(request, response){
         }
       }
       if(found){
-        response.setHeader('Set-Cookie', `sign_in_email=${email}`)
+        let sessionId = Math.random() * 100000
+        sessions[sessionId] = {sign_in_email:email}
+        response.setHeader('Set-Cookie', `sessionId = ${sessionId}`)
         response.statusCode = 200
       }else{
         response.statusCode = 401
